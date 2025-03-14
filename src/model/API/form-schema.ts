@@ -88,12 +88,13 @@ const fieldSchema = z.discriminatedUnion("type", [
 ]);
 
 
-// Generic form schema for any other forms
-export const formSchema = z.object({
+
+
+export const formSchema=z.array(z.object({
   formId: z.string(),
   title: z.string(),
   fields: z.array(fieldSchema)
-});
+}));
 
 export {
   fieldSchema,
