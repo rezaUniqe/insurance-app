@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { DynamicForm } from "@/model/API/form-schema";
-import { FieldRenderer } from "@/app/[locale]/form/field-renderer";
+import { FieldRenderer } from "@/app/[locale]/form/_components/field-renderer";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { generateValidationSchema } from "@/model/API/form-validation-schema";
+import { useSubmitInsuranceFormMutation } from "@/hooks/mutations/use-submit-insurance-form-mutation";
 
 type FormBuilderProps = {
   form: DynamicForm;
@@ -26,6 +27,8 @@ export function FormBuilder({ form }: FormBuilderProps) {
   const formMethods = useForm({
     resolver: zodResolver(validationSchema), // Pass the dynamic schema to zodResolver
   });
+
+  const { mutate } = useSubmitInsuranceFormMutation();
   return (
     <Card className="w-full">
       <CardHeader>
@@ -33,11 +36,14 @@ export function FormBuilder({ form }: FormBuilderProps) {
       </CardHeader>
       <Form {...formMethods}>
         <form
-          onSubmit={formMethods.handleSubmit(()=>{
-
-          }, (e) => {
-            console.log(e);
-          })}
+          onSubmit={formMethods.handleSubmit(
+            () => {
+              mutate();
+            },
+            (e) => {
+              console.log(e);
+            },
+          )}
         >
           <CardContent className="space-y-6">
             {form.fields.map((field) => (

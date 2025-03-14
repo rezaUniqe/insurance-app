@@ -1,4 +1,4 @@
-import FormsTabBar from "@/app/[locale]/form/forms-tab-bar";
+import FormsTabBar from "@/app/[locale]/form/_components/forms-tab-bar";
 import { insuranceService } from "@/service/insurance/insurance-form-service";
 
 async function FormFetchContainer() {

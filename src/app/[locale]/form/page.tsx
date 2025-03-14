@@ -1,7 +1,7 @@
 import {Suspense} from 'react';
 import {FormPopup} from "@/components/popups/form-popup";
 import { Button } from "@/components/ui/button";
-import FormFetchContainer from "@/app/[locale]/form/form-fetch-container";
+import FormFetchContainer from "@/app/[locale]/form/_components/form-fetch-container";
 
 
 

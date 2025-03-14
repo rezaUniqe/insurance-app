@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import {routing} from '@/i18n/routing';
+import { routing } from "@/i18n/routing";
 import ReactQueryProvider from "@/providers/react-query-provider";
+import {hasLocale} from "next-intl";
+import {notFound} from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,25 +22,23 @@ export const metadata: Metadata = {
 };
 
 
-
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({locale}));
-}
-
-export default function RootLayout({
-  children,
-}: Readonly<{
+export default async function RootLayout({
+                                     children,
+                                     params,
+                                   }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+
+  const {locale} = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-      <ReactQueryProvider>
-        {children}
-      </ReactQueryProvider>
-      </body>
+    <html lang={locale}>
+    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <ReactQueryProvider>{children}</ReactQueryProvider>
+    </body>
     </html>
   );
 }

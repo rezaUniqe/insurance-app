@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import FormFetchContainer from "@/app/[locale]/form/form-fetch-container";
+import FormFetchContainer from "@/app/[locale]/form/_components/form-fetch-container";
 
 type FormPopupProps = {
   trigger?: ReactNode;

@@ -2,7 +2,7 @@
 
 
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import {FormBuilder} from "@/app/[locale]/form/form-builder";
+import {FormBuilder} from "@/app/[locale]/form/_components/form-builder";
 import {useState} from "react";
 import {DynamicForm} from "@/model/API/form-schema";
 
