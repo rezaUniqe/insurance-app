@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest'
-import {formSchema} from "@/model/API/form-schema";
+import {formResponseSchema} from "@/model/API/form-schema";
 
 
 const testFormData = [
@@ -361,8 +361,7 @@ const testFormData = [
 describe("form data validation", () => {
 
   test('should parse the form data without any errors ', () => {
-    const parsedFormData = formSchema.safeParse(testFormData);
-    console.log(parsedFormData)
+    const parsedFormData = formResponseSchema.safeParse(testFormData);
     expect(parsedFormData.success).toBe(true)
   });
 
