@@ -1,21 +1,5 @@
 "use client";
 
-import {
-  closestCenter,
-  DndContext,
-  type DragEndEvent,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  horizontalListSortingStrategy,
-  SortableContext,
-  useSortable,
-} from "@dnd-kit/sortable";
-import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -56,36 +40,17 @@ export function SortableHeader({
   columnOrder,
   sortConfig,
   handleSort,
-  handleDragEnd,
 }: {
   visibleColumns: string[];
   columnOrder: string[];
   sortConfig: SortConfig | null;
   handleSort: (column: string) => void;
-  handleDragEnd: (event: DragEndEvent) => void;
 }) {
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
-    useSensor(KeyboardSensor),
-  );
+
 
   return (
     <TableHeader>
       <TableRow>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-          modifiers={[restrictToHorizontalAxis]}
-        >
-          <SortableContext
-            items={columnOrder}
-            strategy={horizontalListSortingStrategy}
-          >
             {columnOrder
               .filter((column) => visibleColumns.includes(column))
               .map((column) => (
@@ -96,8 +61,6 @@ export function SortableHeader({
                   onSort={handleSort}
                 />
               ))}
-          </SortableContext>
-        </DndContext>
       </TableRow>
     </TableHeader>
   );
@@ -112,23 +75,16 @@ export function SortableHeaderCell({
   sortConfig: SortConfig | null;
   onSort: (column: string) => void;
 }) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: column });
 
-  const style = {
-    transform: transform ? `translateX(${transform.x}px)` : undefined,
-    transition,
-  };
+
 
   return (
     <TableHead
-      ref={setNodeRef}
-      style={style}
       className="cursor-pointer select-none"
       onClick={() => onSort(column)}
     >
       <span className="flex items-center gap-2">
-        <span {...attributes} {...listeners} className="cursor-grab">
+        <span className="cursor-grab">
           <GripVertical className="h-4 w-4 text-muted-foreground" />
         </span>
         <span>{column}</span>

@@ -56,7 +56,6 @@ export function FormSubmissionTable({ columns, data }: CustomizableTableProps) {
             columnOrder={columnOrder}
             sortConfig={sortConfig}
             handleSort={handleSort}
-            handleDragEnd={handleDragEnd}
           />
           <DataTableBody
             data={paginatedData}
