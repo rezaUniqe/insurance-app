@@ -95,6 +95,8 @@ export const formResponseSchema = formSchema.array();
 export type DynamicFormResponse = z.infer<typeof formResponseSchema>;
 export type DynamicForm = z.infer<typeof formSchema>;
 export type DynamicFormField = z.infer<typeof fieldSchema>;
+export type SelectFormField = z.infer<typeof selectFieldSchema>;
+export type DynamicOptions = z.infer<typeof dynamicOptionsSchema>;
 
 export {
   fieldSchema,

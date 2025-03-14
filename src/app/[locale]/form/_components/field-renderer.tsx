@@ -20,11 +20,57 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import type { DynamicFormField } from "@/model/API/form-schema";
+import { DynamicFormField, SelectFormField } from "@/model/API/form-schema";
+import { useFetchSelectQueryOptions } from "@/app/[locale]/form/_hooks/use-fetch-select-query-options";
 
 type FieldRendererProps = {
   field: DynamicFormField;
 };
+
+function SelectField(field: SelectFormField) {
+  const form = useFormContext();
+  const dependentValue = useWatch({
+    control: form.control,
+    name: field.dynamicOptions?.dependsOn as string,
+  });
+  const { data } = useFetchSelectQueryOptions({
+    variables:field?.dynamicOptions? {...field.dynamicOptions,dependentValue: dependentValue}:undefined,
+    enabled: !!field.dynamicOptions && !!dependentValue,
+  });
+  const options = field.dynamicOptions ? data : field.options;
+  return (
+    <FormField
+      control={form.control}
+      name={field.id}
+      render={({ field: formField }) => (
+        <FormItem>
+          <FormLabel>
+            {field.label}
+            {field.required && <span className="text-red-500 ml-1">*</span>}
+          </FormLabel>
+          <Select
+            onValueChange={formField.onChange}
+            defaultValue={formField.value}
+          >
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder="Select an option" />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              {options?.map((option) => (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}
 
 export function FieldRenderer({ field }: FieldRendererProps) {
   const [isVisible, setIsVisible] = useState(true);
@@ -32,7 +78,7 @@ export function FieldRenderer({ field }: FieldRendererProps) {
 
   const hasVisibilityField =
     (field.type === "radio" || field.type === "select") &&
-    Object.hasOwn(field, "visibility")
+    Object.hasOwn(field, "visibility");
 
   const dependentFormName = hasVisibilityField
     ? field.visibility?.dependsOn
@@ -122,38 +168,7 @@ export function FieldRenderer({ field }: FieldRendererProps) {
       );
 
     case "select":
-      return (
-        <FormField
-          control={form.control}
-          name={field.id}
-          render={({ field: formField }) => (
-            <FormItem>
-              <FormLabel>
-                {field.label}
-                {field.required && <span className="text-red-500 ml-1">*</span>}
-              </FormLabel>
-              <Select
-                onValueChange={formField.onChange}
-                defaultValue={formField.value}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select an option" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {field.options?.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      );
+      return <SelectField {...field} />;
 
     case "radio":
       return (
