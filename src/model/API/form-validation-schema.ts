@@ -71,6 +71,9 @@ const createFieldValidationSchema = (field: DynamicFormField) => {
   return fieldSchema;
 };
 
+
+
+
 const createFormValidationSchema = (fields: DynamicFormField[]) => {
   const shape: Record<string, z.ZodTypeAny> = {};
 
@@ -88,4 +91,36 @@ const createFormValidationSchema = (fields: DynamicFormField[]) => {
 
 export const generateValidationSchema = (form: DynamicForm) => {
   return createFormValidationSchema(form.fields);
+};
+
+
+
+
+export const createDefaultValues = (fields: DynamicFormField[]): Record<string, unknown> => {
+  const defaultValues: Record<string, unknown> = {};
+
+  fields.forEach((field) => {
+    if (field.type === "group" && field.fields) {
+      defaultValues[field.id] = createDefaultValues(field.fields);
+    } else {
+      defaultValues[field.id] = getDefaultValue(field);
+    }
+  });
+
+  return defaultValues;
+};
+
+const getDefaultValue = (field: DynamicFormField) => {
+  switch (field.type) {
+    case "text":
+    case "select":
+    case "radio":
+      return "sdsdsd";
+    case "number":
+      return "";
+    case "checkbox":
+      return [];
+    default:
+      return undefined;
+  }
 };

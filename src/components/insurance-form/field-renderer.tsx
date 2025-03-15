@@ -21,7 +21,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { DynamicFormField, SelectFormField } from "@/model/API/form-schema";
-import { useFetchSelectQueryOptions } from "@/app/[locale]/form/_hooks/use-fetch-select-query-options";
+import { useFetchSelectQueryOptions } from "@/hooks/use-fetch-select-query-options";
 
 type FieldRendererProps = {
   field: DynamicFormField;
@@ -42,6 +42,7 @@ function SelectField(field: SelectFormField) {
     <FormField
       control={form.control}
       name={field.id}
+      defaultValue={""}
       render={({ field: formField }) => (
         <FormItem>
           <FormLabel>
@@ -76,6 +77,8 @@ export function FieldRenderer({ field }: FieldRendererProps) {
   const [isVisible, setIsVisible] = useState(true);
   const form = useFormContext();
 
+  console.log(form.formState.defaultValues)
+
   const hasVisibilityField =
     (field.type === "radio" || field.type === "select") &&
     Object.hasOwn(field, "visibility");
@@ -105,6 +108,7 @@ export function FieldRenderer({ field }: FieldRendererProps) {
         <FormField
           control={form.control}
           name={field.id}
+          defaultValue={""}
           render={({ field: formField }) => (
             <FormItem>
               <FormLabel>
@@ -124,6 +128,7 @@ export function FieldRenderer({ field }: FieldRendererProps) {
       return (
         <FormField
           name={field.id}
+          defaultValue={""}
           render={({ field: formField }) => (
             <FormItem>
               <FormLabel>
@@ -150,6 +155,7 @@ export function FieldRenderer({ field }: FieldRendererProps) {
     case "date":
       return (
         <FormField
+          defaultValue={Date.now()}
           control={form.control}
           name={field.id}
           render={({ field: formField }) => (
@@ -209,6 +215,7 @@ export function FieldRenderer({ field }: FieldRendererProps) {
         <FormField
           control={form.control}
           name={field.id}
+          defaultValue={[]}
           render={() => (
             <FormItem>
               <FormLabel>

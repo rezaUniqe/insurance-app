@@ -5,6 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function findArrayInObject(obj: Record<string, any>): string[] | undefined {
+export function findArrayInObject(obj: Record<string, unknown>): string[] {
   return Object.values(obj).find(value => Array.isArray(value))??[];
 }

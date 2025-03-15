@@ -1,10 +1,10 @@
-import FormsTabBar from "@/app/[locale]/form/_components/forms-tab-bar";
+import FormsList from "@/components/insurance-form/forms-list";
 import { insuranceService } from "@/service/insurance/insurance-form-service";
 
 async function FormFetchContainer() {
   const forms = await insuranceService.getAllAvailableForms();
 
-  return <FormsTabBar forms={forms} />;
+  return <FormsList forms={forms} />;
 }
 
 export default FormFetchContainer;

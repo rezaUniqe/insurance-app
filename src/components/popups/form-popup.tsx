@@ -1,39 +1,59 @@
 "use client";
 
-import {ReactNode, Suspense, useState} from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import FormFetchContainer from "@/app/[locale]/form/_components/form-fetch-container";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { FormBuilder } from "@/components/insurance-form/form-builder";
+import type { DynamicForm } from "@/model/API/form-schema";
+import {useIsMobile} from "@/hooks/use-is-mobile";
 
-type FormPopupProps = {
-  trigger?: ReactNode;
-  children?: ReactNode;
-};
+interface FormModalProps {
+  form: DynamicForm | null;
+  isOpen: boolean;
+  onClose: () => void;
+}
 
-export function FormPopup({ trigger,children }: FormPopupProps) {
-  const [open, setOpen] = useState(false);
+export function FormModal({ form, isOpen, onClose }: FormModalProps) {
+ const isMobile=useIsMobile()
+  if (!form) return null;
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || <Button>Open Insurance Forms</Button>}
-      </DialogTrigger>
-      <DialogContent
-        onInteractOutside={(e) => e.preventDefault()}
-        className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto"
-      >
-        <DialogHeader>
-          <DialogTitle>Insurance Applications</DialogTitle>
-        </DialogHeader>
+    <>
+      {isMobile && <div className="md:hidden">
+        <Drawer open={isMobile?isOpen:undefined} onOpenChange={isMobile?onClose:undefined}>
+          <DrawerContent  onInteractOutside={
+            (e)=>e.preventDefault()
+          } className="md:hidden max-h-[90vh]">
+            <DrawerHeader>
+              <DrawerTitle>{form.title}</DrawerTitle>
+            </DrawerHeader>
+              <FormBuilder form={form} />
+          </DrawerContent>
+        </Drawer>
+      </div>
+      }
 
-        {children}
-      </DialogContent>
-    </Dialog>
+      {!isMobile &&<div className="hidden md:block">
+        <Dialog open={isOpen} onOpenChange={onClose}>
+          <DialogContent onInteractOutside={
+            (e)=>e.preventDefault()
+          } className="max-w-3xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>{form.title}</DialogTitle>
+            </DialogHeader>
+            <FormBuilder form={form} />
+          </DialogContent>
+        </Dialog>
+      </div>}
+    </>
   );
 }
