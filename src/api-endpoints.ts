@@ -4,6 +4,6 @@ const createUrlFromPath = (path: string) => {
 
 export const ApiEndpoints = {
   submitForm: createUrlFromPath("/api/insurance/forms/submit"),
-  getSubmittedForms: createUrlFromPath("/api/insurance/forms/submit"),
+  getSubmittedForms: createUrlFromPath("/api/insurance/forms/submissions"),
   getForms: createUrlFromPath("/api/insurance/forms"),
 };

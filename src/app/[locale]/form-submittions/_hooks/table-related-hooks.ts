@@ -46,7 +46,7 @@ export function useColumnOrder(initialColumns: string[]) {
 export function useFilteredAndPaginatedData(data: Record<string, any>[], sortConfig: SortConfig | null) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 1;
 
   const filteredAndSortedData = useMemo(() => {
     let result = [...data];

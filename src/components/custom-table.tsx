@@ -84,9 +84,6 @@ export function SortableHeaderCell({
       onClick={() => onSort(column)}
     >
       <span className="flex items-center gap-2">
-        <span className="cursor-grab">
-          <GripVertical className="h-4 w-4 text-muted-foreground" />
-        </span>
         <span>{column}</span>
         {sortConfig?.column === column &&
           (sortConfig.direction === "asc" ? (

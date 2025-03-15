@@ -14,17 +14,17 @@ import {
   useFilteredAndPaginatedData,
   useSorting,
 } from "@/app/[locale]/form-submittions/_hooks/table-related-hooks";
+import {FormSubmissionResponse} from "@/model/API/form-submission-schema";
 
 interface CustomizableTableProps {
-  columns: string[];
-  data: Record<string, any>[];
+data:FormSubmissionResponse
 }
 
-export function FormSubmissionTable({ columns, data }: CustomizableTableProps) {
+export function FormSubmissionTable({ data:{data,columns} }: CustomizableTableProps) {
   const { visibleColumns, toggleColumnVisibility } =
     useColumnVisibility(columns);
   const { sortConfig, handleSort } = useSorting();
-  const { columnOrder, handleDragEnd } = useColumnOrder(columns);
+  const { columnOrder } = useColumnOrder(columns);
   const {
     searchTerm,
     setSearchTerm,
