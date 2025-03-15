@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import ReactQueryProvider from "@/providers/react-query-provider";
 import {hasLocale} from "next-intl";
 import {notFound} from "next/navigation";
+import {ThemeProvider} from "@/providers/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,9 +36,11 @@ export default async function RootLayout({
     notFound();
   }
   return (
-    <html lang={locale}>
+    <html suppressHydrationWarning lang={locale}>
     <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-    <ReactQueryProvider>{children}</ReactQueryProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <ReactQueryProvider>{children}</ReactQueryProvider>
+    </ThemeProvider>
     </body>
     </html>
   );
