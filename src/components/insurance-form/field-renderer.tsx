@@ -25,23 +25,28 @@ import { useFetchSelectQueryOptions } from "@/hooks/use-fetch-select-query-optio
 
 type FieldRendererProps = {
   field: DynamicFormField;
+  groupID?: string;
 };
 
-function SelectField(field: SelectFormField) {
+function SelectField({groupID, ...field }: SelectFormField & { groupID?: string }) {
   const form = useFormContext();
   const dependentValue = useWatch({
     control: form.control,
     name: field.dynamicOptions?.dependsOn as string,
   });
   const { data } = useFetchSelectQueryOptions({
-    variables:field?.dynamicOptions? {...field.dynamicOptions,dependentValue: dependentValue}:undefined,
+    variables: field?.dynamicOptions
+      ? { ...field.dynamicOptions, dependentValue: dependentValue }
+      : undefined,
     enabled: !!field.dynamicOptions && !!dependentValue,
   });
   const options = field.dynamicOptions ? data : field.options;
+  const fieldName = createFormName(field.id, groupID);
+
   return (
     <FormField
       control={form.control}
-      name={field.id}
+      name={fieldName}
       defaultValue={""}
       render={({ field: formField }) => (
         <FormItem>
@@ -73,12 +78,14 @@ function SelectField(field: SelectFormField) {
   );
 }
 
-export function FieldRenderer({ field }: FieldRendererProps) {
+function createFormName(name: string, groupId?: string): string {
+  return groupId ? `${groupId}.${name}` : name;
+}
+
+export function FieldRenderer({ field, groupID }: FieldRendererProps) {
   const [isVisible, setIsVisible] = useState(true);
   const form = useFormContext();
-
-  console.log(form.formState.defaultValues)
-
+  const fieldName = createFormName(field.id, groupID);
   const hasVisibilityField =
     (field.type === "radio" || field.type === "select") &&
     Object.hasOwn(field, "visibility");
@@ -107,7 +114,7 @@ export function FieldRenderer({ field }: FieldRendererProps) {
       return (
         <FormField
           control={form.control}
-          name={field.id}
+          name={fieldName}
           defaultValue={""}
           render={({ field: formField }) => (
             <FormItem>
@@ -127,7 +134,7 @@ export function FieldRenderer({ field }: FieldRendererProps) {
     case "number":
       return (
         <FormField
-          name={field.id}
+          name={fieldName}
           defaultValue={""}
           render={({ field: formField }) => (
             <FormItem>
@@ -157,7 +164,7 @@ export function FieldRenderer({ field }: FieldRendererProps) {
         <FormField
           defaultValue={Date.now()}
           control={form.control}
-          name={field.id}
+          name={fieldName}
           render={({ field: formField }) => (
             <FormItem>
               <FormLabel>
@@ -174,13 +181,13 @@ export function FieldRenderer({ field }: FieldRendererProps) {
       );
 
     case "select":
-      return <SelectField {...field} />;
+      return <SelectField  groupID={groupID} {...field} />;
 
     case "radio":
       return (
         <FormField
           control={form.control}
-          name={field.id}
+          name={fieldName}
           render={({ field: formField }) => (
             <FormItem className="space-y-3">
               <FormLabel>
@@ -214,7 +221,7 @@ export function FieldRenderer({ field }: FieldRendererProps) {
       return (
         <FormField
           control={form.control}
-          name={field.id}
+          name={fieldName}
           defaultValue={[]}
           render={() => (
             <FormItem>
@@ -263,7 +270,11 @@ export function FieldRenderer({ field }: FieldRendererProps) {
           <h3 className="font-medium text-lg">{field.label}</h3>
           <div className="space-y-4">
             {field.fields?.map((nestedField) => (
-              <FieldRenderer key={nestedField.id} field={nestedField} />
+              <FieldRenderer
+                groupID={field.id}
+                key={nestedField.id}
+                field={nestedField}
+              />
             ))}
           </div>
         </div>

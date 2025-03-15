@@ -1,47 +1,49 @@
-import { z, ZodArray, ZodEffects, ZodNumber, ZodString } from "zod";
+import {z, ZodNumber, ZodString, ZodType} from "zod";
 import { DynamicForm, DynamicFormField } from "@/model/API/form-schema";
 
-type SchemaType= | ZodNumber
-  | ZodString
-  | ZodEffects<ZodString, string, string>
-  | ZodArray<ZodString>
-  | ZodEffects<ZodArray<ZodString>, string[], string[]>
-
-
 const createFieldValidationSchema = (field: DynamicFormField) => {
-  let fieldSchema:SchemaType
-    = z.string(); // Start with an undefined schema
+  let fieldSchema :unknown=z.string()
   switch (field.type) {
     case "text":
       fieldSchema = z.string();
       if (field.validation?.pattern) {
-        fieldSchema = fieldSchema.regex(new RegExp(field.validation.pattern), {
+        fieldSchema = (fieldSchema as ZodString).regex(new RegExp(field.validation.pattern), {
           message: `${field.label} is invalid`,
         });
       }
       if (field.validation?.min !== undefined) {
-        fieldSchema = fieldSchema.min(field.validation.min, {
+        fieldSchema = (fieldSchema as ZodString).min(field.validation.min, {
           message: `${field.label} should be at least ${field.validation.min}`,
         });
       }
       if (field.validation?.max !== undefined) {
-        fieldSchema = fieldSchema.max(field.validation.max, {
+        fieldSchema = (fieldSchema as ZodString).max(field.validation.max, {
           message: `${field.label} should be at most ${field.validation.max}`,
         });
+      }
+      if (field.required) {
+        fieldSchema = (fieldSchema as ZodString).refine((e) => !!e, {
+          message: `${field.label} required}`,
+        })
       }
       break;
 
     case "number":
-      fieldSchema = z.number();
+      fieldSchema = z.union([z.number(), z.literal("")]);
       if (field.validation?.min !== undefined) {
-        fieldSchema = fieldSchema.min(field.validation.min, {
+        fieldSchema = (fieldSchema as ZodNumber).min(field.validation.min, {
           message: `${field.label} should be at least ${field.validation.min}`,
         });
       }
       if (field.validation?.max !== undefined) {
-        fieldSchema = fieldSchema.max(field.validation.max, {
+        fieldSchema = (fieldSchema as ZodNumber).max(field.validation.max, {
           message: `${field.label} should be at most ${field.validation.max}`,
         });
+      }
+      if (field.required) {
+        fieldSchema = (fieldSchema as ZodString).refine((e) => e !== "", {
+          message: `${field.label} required}`,
+        }) as unknown as ZodNumber;
       }
       break;
 
@@ -49,20 +51,30 @@ const createFieldValidationSchema = (field: DynamicFormField) => {
     case "radio":
       fieldSchema = z.string();
       if (field.options && field.options.length > 0) {
-        fieldSchema = fieldSchema.refine(
+        fieldSchema = (fieldSchema as ZodString).refine(
           (value) => field.options?.includes(value),
           {
             message: `${field.label} should be one of the valid options`,
           },
         );
       }
+      if (field.required) {
+        fieldSchema = (fieldSchema as ZodString).refine((e) => !!e, {
+          message: `${field.label} required}`,
+        });
+      }
       break;
 
     case "checkbox":
       fieldSchema = z.array(z.string());
-      fieldSchema = fieldSchema.refine((val) => val.length > 0, {
+      fieldSchema = (fieldSchema as ZodString).refine((val) => val.length > 0, {
         message: `${field.label} should have at least required`,
       });
+      if (field.required) {
+        fieldSchema = (fieldSchema as ZodString).refine((e) => e !== undefined, {
+          message: `${field.label} required}`,
+        });
+      }
       break;
 
     default:
@@ -71,56 +83,20 @@ const createFieldValidationSchema = (field: DynamicFormField) => {
   return fieldSchema;
 };
 
-
-
-
 const createFormValidationSchema = (fields: DynamicFormField[]) => {
   const shape: Record<string, z.ZodTypeAny> = {};
 
   fields.forEach((field) => {
     if (field.type === "group" && field.fields) {
-      // Recursively create validation schema for nested group fields
       shape[field.id] = createFormValidationSchema(field.fields);
     } else {
-      shape[field.id] = createFieldValidationSchema(field);
+      shape[field.id] = createFieldValidationSchema(field) as ZodType;
     }
   });
 
-  return z.object(shape); // Return the full schema for the form
+  return z.object(shape);
 };
 
 export const generateValidationSchema = (form: DynamicForm) => {
   return createFormValidationSchema(form.fields);
-};
-
-
-
-
-export const createDefaultValues = (fields: DynamicFormField[]): Record<string, unknown> => {
-  const defaultValues: Record<string, unknown> = {};
-
-  fields.forEach((field) => {
-    if (field.type === "group" && field.fields) {
-      defaultValues[field.id] = createDefaultValues(field.fields);
-    } else {
-      defaultValues[field.id] = getDefaultValue(field);
-    }
-  });
-
-  return defaultValues;
-};
-
-const getDefaultValue = (field: DynamicFormField) => {
-  switch (field.type) {
-    case "text":
-    case "select":
-    case "radio":
-      return "sdsdsd";
-    case "number":
-      return "";
-    case "checkbox":
-      return [];
-    default:
-      return undefined;
-  }
 };
