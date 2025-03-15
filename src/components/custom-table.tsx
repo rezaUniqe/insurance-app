@@ -91,7 +91,7 @@ export function DataTableBody({
   columnOrder,
   visibleColumns,
 }: {
-  data: Record<string, string>[];
+  data: Record<string, string|number>[];
   columnOrder: string[];
   visibleColumns: string[];
 }) {

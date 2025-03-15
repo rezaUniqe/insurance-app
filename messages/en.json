@@ -2,5 +2,8 @@
   "form": {
     "enrol-in-form": "Click To Enrol",
     "forms-list-title": "Insurance Forms"
+  },
+  "applications-table": {
+    "title": "Applications"
   }
 }
