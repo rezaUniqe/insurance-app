@@ -23,12 +23,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-  ChevronDown,
-  ChevronUp,
-  GripVertical,
-  SlidersHorizontal,
-} from "lucide-react";
+import { ChevronDown, ChevronUp, SlidersHorizontal } from "lucide-react";
 
 interface SortConfig {
   column: string;
@@ -46,21 +41,19 @@ export function SortableHeader({
   sortConfig: SortConfig | null;
   handleSort: (column: string) => void;
 }) {
-
-
   return (
     <TableHeader>
       <TableRow>
-            {columnOrder
-              .filter((column) => visibleColumns.includes(column))
-              .map((column) => (
-                <SortableHeaderCell
-                  key={column}
-                  column={column}
-                  sortConfig={sortConfig}
-                  onSort={handleSort}
-                />
-              ))}
+        {columnOrder
+          .filter((column) => visibleColumns.includes(column))
+          .map((column) => (
+            <SortableHeaderCell
+              key={column}
+              column={column}
+              sortConfig={sortConfig}
+              onSort={handleSort}
+            />
+          ))}
       </TableRow>
     </TableHeader>
   );
@@ -75,9 +68,6 @@ export function SortableHeaderCell({
   sortConfig: SortConfig | null;
   onSort: (column: string) => void;
 }) {
-
-
-
   return (
     <TableHead
       className="cursor-pointer select-none"
@@ -101,7 +91,7 @@ export function DataTableBody({
   columnOrder,
   visibleColumns,
 }: {
-  data: Record<string, any>[];
+  data: Record<string, string>[];
   columnOrder: string[];
   visibleColumns: string[];
 }) {

@@ -43,7 +43,7 @@ export function useColumnOrder(initialColumns: string[]) {
   return { columnOrder, handleDragEnd };
 }
 
-export function useFilteredAndPaginatedData(data: Record<string, any>[], sortConfig: SortConfig | null) {
+export function useFilteredAndPaginatedData(data: Record<string, string>[], sortConfig: SortConfig | null) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 1;
