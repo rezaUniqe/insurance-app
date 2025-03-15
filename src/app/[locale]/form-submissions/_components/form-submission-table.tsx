@@ -13,7 +13,7 @@ import {
   useColumnVisibility,
   useFilteredAndPaginatedData,
   useSorting,
-} from "@/app/[locale]/form-submittions/_hooks/table-related-hooks";
+} from "@/app/[locale]/form-submissions/_hooks/table-related-hooks";
 import {FormSubmissionResponse} from "@/model/API/form-submission-schema";
 
 interface CustomizableTableProps {

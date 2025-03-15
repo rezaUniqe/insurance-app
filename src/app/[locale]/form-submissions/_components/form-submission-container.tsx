@@ -2,7 +2,7 @@
 
 
 import {useFormSubmissionQuery} from "@/hooks/queries/use-form-submission-query";
-import {FormSubmissionTable} from "@/app/[locale]/form-submittions/_components/form-submission-table";
+import {FormSubmissionTable} from "@/app/[locale]/form-submissions/_components/form-submission-table";
 
 const FormSubmissionContainer =  () => {
  const {data}=useFormSubmissionQuery()

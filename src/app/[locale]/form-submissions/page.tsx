@@ -1,4 +1,4 @@
-import FormSubmissionContainer from "@/app/[locale]/form-submittions/_components/form-submission-container";
+import FormSubmissionContainer from "@/app/[locale]/form-submissions/_components/form-submission-container";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { Suspense } from "react";
 

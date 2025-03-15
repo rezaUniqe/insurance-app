@@ -28,15 +28,18 @@ type FieldRendererProps = {
   groupID?: string;
 };
 
-function SelectField({groupID, ...field }: SelectFormField & { groupID?: string }) {
+function SelectField({
+  groupID,
+  ...field
+}: SelectFormField & { groupID?: string }) {
   const form = useFormContext();
   const fieldName = createFormName(field.id, groupID);
 
   const dependentValue = useWatch({
     control: form.control,
-    name:createFormName(field.dynamicOptions?.dependsOn as string,groupID),
+    name: createFormName(field.dynamicOptions?.dependsOn as string, groupID),
   });
-  const { data } = useFetchSelectQueryOptions({
+  const { data, isLoading } = useFetchSelectQueryOptions({
     variables: field?.dynamicOptions
       ? { ...field.dynamicOptions, dependentValue: dependentValue }
       : undefined,
@@ -65,11 +68,13 @@ function SelectField({groupID, ...field }: SelectFormField & { groupID?: string 
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {options?.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
+              {isLoading
+                ? "loading..."
+                : options?.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
             </SelectContent>
           </Select>
           <FormMessage />
@@ -96,7 +101,7 @@ export function FieldRenderer({ field, groupID }: FieldRendererProps) {
     : "";
   const dependentValue = useWatch({
     control: form.control,
-    name: createFormName(dependentFormName  as string,groupID),
+    name: createFormName(dependentFormName as string, groupID),
   });
 
   useEffect(() => {
@@ -182,7 +187,7 @@ export function FieldRenderer({ field, groupID }: FieldRendererProps) {
       );
 
     case "select":
-      return <SelectField  groupID={groupID} {...field} />;
+      return <SelectField groupID={groupID} {...field} />;
 
     case "radio":
       return (

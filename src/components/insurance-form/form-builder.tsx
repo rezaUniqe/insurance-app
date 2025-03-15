@@ -15,6 +15,7 @@ type FormBuilderProps = {
 
 export function FormBuilder({ form, onFormSubmitted }: FormBuilderProps) {
 
+  console.log(form)
   const validationSchema = generateValidationSchema(form);
 
   const formMethods = useForm({

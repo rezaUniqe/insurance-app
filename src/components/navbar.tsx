@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FormInput, Phone } from "lucide-react";
+import { FormInput,LucidePaperclip } from "lucide-react";
 import { ThemeToggle } from "@/components/toggle-theme";
 
 const Navbar = () => {
@@ -13,7 +13,7 @@ const Navbar = () => {
         href={"/form-submissions"}
         className="flex flex-col items-center text-xs"
       >
-        <Phone className="h-5 w-5 mb-1" />
+        <LucidePaperclip className="h-5 w-5 mb-1" />
         <span>Submissions</span>
       </Link>
       <div className="flex flex-col items-center text-xs">
