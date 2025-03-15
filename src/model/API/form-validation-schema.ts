@@ -29,7 +29,7 @@ const createFieldValidationSchema = (field: DynamicFormField) => {
       break;
 
     case "number":
-      fieldSchema = z.union([z.number(), z.literal("")]);
+      fieldSchema = z.number();
       if (field.validation?.min !== undefined) {
         fieldSchema = (fieldSchema as ZodNumber).min(field.validation.min, {
           message: `${field.label} should be at least ${field.validation.min}`,
