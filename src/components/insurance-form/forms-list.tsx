@@ -6,6 +6,7 @@ import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { FormModal } from "@/components/popups/form-popup";
+import { useTranslations } from "next-intl";
 
 interface Props {
   forms: DynamicForm[];
@@ -14,7 +15,7 @@ interface Props {
 const FormsList = ({ forms }: Props) => {
   const [selectedForm, setSelectedForm] = useState<DynamicForm | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const t = useTranslations("form");
   const handleOpenForm = (form: DynamicForm) => {
     setSelectedForm(form);
     setIsModalOpen(true);
@@ -39,7 +40,7 @@ const FormsList = ({ forms }: Props) => {
                 className="w-full justify-between group"
                 onClick={() => handleOpenForm(form)}
               >
-                Fill form
+                {t("enrol-in-form")}
                 <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </CardFooter>
