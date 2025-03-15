@@ -36,7 +36,7 @@ export function FormModal({ form, isOpen, onClose }: FormModalProps) {
             <DrawerHeader>
               <DrawerTitle>{form.title}</DrawerTitle>
             </DrawerHeader>
-              <FormBuilder form={form} />
+              <FormBuilder onFormSubmitted={onClose} form={form} />
           </DrawerContent>
         </Drawer>
       </div>
@@ -50,7 +50,7 @@ export function FormModal({ form, isOpen, onClose }: FormModalProps) {
             <DialogHeader>
               <DialogTitle>{form.title}</DialogTitle>
             </DialogHeader>
-            <FormBuilder form={form} />
+            <FormBuilder onFormSubmitted={onClose} form={form} />
           </DialogContent>
         </Dialog>
       </div>}

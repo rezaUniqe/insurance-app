@@ -30,9 +30,11 @@ type FieldRendererProps = {
 
 function SelectField({groupID, ...field }: SelectFormField & { groupID?: string }) {
   const form = useFormContext();
+  const fieldName = createFormName(field.id, groupID);
+
   const dependentValue = useWatch({
     control: form.control,
-    name: field.dynamicOptions?.dependsOn as string,
+    name:createFormName(field.dynamicOptions?.dependsOn as string,groupID),
   });
   const { data } = useFetchSelectQueryOptions({
     variables: field?.dynamicOptions
@@ -41,7 +43,6 @@ function SelectField({groupID, ...field }: SelectFormField & { groupID?: string 
     enabled: !!field.dynamicOptions && !!dependentValue,
   });
   const options = field.dynamicOptions ? data : field.options;
-  const fieldName = createFormName(field.id, groupID);
 
   return (
     <FormField
@@ -95,7 +96,7 @@ export function FieldRenderer({ field, groupID }: FieldRendererProps) {
     : "";
   const dependentValue = useWatch({
     control: form.control,
-    name: dependentFormName as string,
+    name: createFormName(dependentFormName  as string,groupID),
   });
 
   useEffect(() => {
@@ -196,6 +197,7 @@ export function FieldRenderer({ field, groupID }: FieldRendererProps) {
               </FormLabel>
               <FormControl>
                 <RadioGroup
+                  name={fieldName}
                   onValueChange={formField.onChange}
                   defaultValue={formField.value}
                   className="flex flex-col space-y-1"

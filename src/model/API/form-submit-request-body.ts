@@ -1,0 +1,1 @@
+export type FormSubmitRequestBody = Record<string, unknown>
