@@ -34,8 +34,8 @@ The **Smart Insurance Application Portal** is a Next.js-based web application th
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/smart-insurance-portal.git
-cd smart-insurance-portal
+git clone https://github.com/rezaUniqe/insurance-app.git
+cd insurance-app
 ```
 
 ### 2️⃣ Install Dependencies
@@ -49,7 +49,7 @@ npm install
 Create a `.env.local` file in the root directory and add:
 
 ```env
-NEXT_PUBLIC_API_BASE_URL=https://assignment.devotel.io
+NEXT_PUBLIC_BASE_URL=https://assignment.devotel.io
 ```
 
 ### 4️⃣ Run the Development Server
@@ -90,7 +90,7 @@ vercel
 ### 🚀 Future Enhancements
 
 -   Drag-and-drop field reordering (Upcoming)
--   Autosave drafts before submission
+-   Autosave drafts before submission(Upcoming)
 -   Dark Mode toggle
 -   Additional unit and integration tests
 
